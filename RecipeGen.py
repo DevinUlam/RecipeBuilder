@@ -1,13 +1,11 @@
-
 #initalized vars 
-restart = "Y"
+
 yes = set(['yes','y','Y',''])
 no = set(['no','n','N'])
-choice = 'yes'
-i=0
-j=0
-k=0
+choice = 'yes' #yes, no and choice used to restart program
+countArray = {} #initialize array that counts # of recipes chosen
 import random
+import operator
 
 RecipeCatalog = {
 	1: 'Chicken Fried Rice \n',
@@ -71,7 +69,12 @@ Steps = {
     "4) Cook at HIGH 3 to 4 hours or at LOW 5 to 6 hours. \n"
     "Notes: If you want to thicken this saucy chili, stir in finely crushed saltine crackers until the desired thickness is achieved. \n"
 }
-    
+
+#Build countArray
+for key in RecipeCatalog:
+	countArray[key] = 0
+	print(key)
+
 #While loop to continue on user request
 while (choice in yes):
     input('Press Enter to Generate a Random Recipe... \n')
@@ -81,15 +84,13 @@ while (choice in yes):
     print("Steps: \n", Steps[recipenum], "\n")
 
 #Favorite Recipe Counting
+    for key in RecipeCatalog:
+    	if recipenum == key:
+    		
+    		countArray[recipenum] += 1
+    		print("countarray= ", countArray)
     
-    if recipenum == 1:
-        i=i+1
-    elif recipenum == 2:
-        j=j+1
-    else:
-        k=k+1
-    
-	#Below is the validation to restart the recipe generation
+#Below is the validation to restart the recipe generation
     choice = input('Would you like to restart? (Y/N)')
 	
     if (choice in no):
@@ -102,9 +103,7 @@ while (choice in yes):
 #End of While Loop
 
 #Favorite Recipe Determination
-
-countArray=(i,j,k) #would use a loop to load this array if had more recipes... Maybe I will do this before Sunday
-countFavRecipe = max(countArray)
-numFavRecipe = 1 + countArray.index(max(countArray)) #add one due to indexing starting at 0
-
-print("\nYour favorite recipe was: ", RecipeCatalog[numFavRecipe])
+FavRecipe = max(countArray, key=countArray.get) #gets the max KEY of dict
+numFavRecipe = countArray[FavRecipe] #max value of said key
+print("\nYour favorite recipe was: ", RecipeCatalog[FavRecipe])
+print("You ate it ",numFavRecipe," times. \n")
