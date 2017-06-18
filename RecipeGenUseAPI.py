@@ -2,8 +2,8 @@ import operator
 import random
 import requests
 import json
-#initalized vars 
 
+#initalized vars
 yes = set(['yes','y','Y',''])
 no = set(['no','n','N'])
 choice = 'yes' #yes, no and choice used to restart program
