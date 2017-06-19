@@ -2,60 +2,68 @@ import operator
 import random
 import requests
 import json
+#initalized vars 
 
-#initalized vars
 yes = set(['yes','y','Y',''])
 no = set(['no','n','N'])
-choice = 'yes' #yes, no and choice used to restart program
+#yes, no and choice used to restart program
+newfoodchoice = 'yes'
 
+def outputRecipe(food):
+	randint= random.randint(0,100)
 
-#Build countArray
-countArray = {} #initialize array that counts # of recipes chosen
-for key in RecipeCatalog:
-	countArray[key] = 0 #builds array that has keys of recipe and values(times eaten) of 0 b/c starting with 0 
-	 
+	#output simple JSON request to recipe API
+	response=requests.get("https://api.edamam.com/search?q={0}&app_id=2876e49a&app_key=523091b1d1951ab568a7a2c496c85447&from={1}&to={2}".format(food, randint, randint+1))
+	data=response.json()
+	while data['hits'] == []:
+		response=requests.get("https://api.edamam.com/search?q={0}&app_id=2876e49a&app_key=523091b1d1951ab568a7a2c496c85447&from={1}&to={2}".format(food, randint, randint+1))
+		data=response.json()
+
+	#finds recipe name
+	Recipe = data['hits'][0]['recipe']['label']
+	print("\nRecipe: \n\n", Recipe)
+
+	#loops through ingredients
+	ingredientList = data['hits'][0]['recipe']['ingredients']
+	print("\nIngredients: \n")
+	for i in ingredientList:
+		print(i['text'])
 
 #While loop to continue on user request
-while (choice in yes):
-    input('Press Enter to Generate a Random Recipe... \n')
+while (newfoodchoice in yes):
+    
 
-    #generates random int for use in the URL
-    randint= random.randint(0,100)
+	#allows user to input a type of food they want in recipe
+    foodinput = input('\nWant a recipe? Well, what kind of food would you like to eat? \n')
 
-    #allows user to input a type of food they want in recipe
-    foodinput = input('Want a recipe? Well, what kind of food would you like to eat? \n')
+    redo = 'yes'
+    while (redo in yes):
 
-    #output simple JSON request to recipe API
-    response=requests.get("https://api.edamam.com/search?q={0}&app_id=2876e49a&app_key=523091b1d1951ab568a7a2c496c85447&from={1}&to={2}".format(foodinput, randint, randint+1))
-    data=response.json()
+    	outputRecipe(foodinput);
 
-    while data['hits'] == []:
-    	response=requests.get("https://api.edamam.com/search?q={0}&app_id=2876e49a&app_key=523091b1d1951ab568a7a2c496c85447&from={1}&to={2}".format(foodinput,randint, randint+1))
-    	data=response.json()
+    	redo = input('\nWould you like to see another {0} recipe? (Y/N)'.format(foodinput))
+    	if (redo in no):
+    		break
+    			
+    	elif (redo in yes):
+        	redo in yes
+        		
+    	else:
+        	print("\nPlease respond with 'Y' or 'N'")
+        	while (redo not in yes & redo not in no):
+        		redo = input('\nLet''s ask again... Would you like to see another {0} recipe? (Y/N)'.format(foodinput))
 
-    #finds recipe name
-    Recipe = data['hits'][0]['recipe']['label']
-    print("\nRecipe: \n\n", Recipe)
-
-    #loops through ingredients
-    ingredientList = data['hits'][0]['recipe']['ingredients']
-    print("\nIngredients: \n")
-    for i in ingredientList:
-    	print(i['text'])
-	
-	#Below is the validation to restart the recipe generation
-    choice = input('Would you like to restart? (Y/N)')
-	
-    if (choice in no):
-        break 
-    elif (choice in yes):
-        choice in yes
+    newfoodchoice = input('\nWould you like to search another food group? (Y/N)\n')
+    if (newfoodchoice in no):
+        break
+    elif (newfoodchoice in yes):
+    	newfoodchoice in yes
     else:
-        print("Please respond with 'Y' or 'N'")
-        choice = input('Let''s ask again... Would you like to restart? (Y/N)')
-
+        print("\nPlease respond with 'Y' or 'N'\n")
+        redo = input('\nLet''s ask again... search another food group? (Y/N)\n')
 
 #End of While Loop
+
 
 
 
