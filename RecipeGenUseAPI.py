@@ -10,7 +10,8 @@ no = set(['no','n','N'])
 newfoodchoice = 'yes'
 
 def outputRecipe(food):
-	randint= random.randint(0,100)
+	randint= random.randint(0,10)
+	file = open("reciperesults.txt","w")
 
 	#output simple JSON request to recipe API
 	response=requests.get("https://api.edamam.com/search?q={0}&app_id=2876e49a&app_key=523091b1d1951ab568a7a2c496c85447&from={1}&to={2}".format(food, randint, randint+1))
@@ -22,12 +23,19 @@ def outputRecipe(food):
 	#finds recipe name
 	Recipe = data['hits'][0]['recipe']['label']
 	print("\nRecipe: \n\n", Recipe)
+	file.write("\nRecipe: \n\n")
+	file.write(Recipe)
+	file.write("\n")
 
 	#loops through ingredients
 	ingredientList = data['hits'][0]['recipe']['ingredients']
 	print("\nIngredients: \n")
+	file.write("\nIngredients: \n")
 	for i in ingredientList:
 		print(i['text'])
+		file.write(i['text'])
+		file.write("\n")
+	file.close()
 
 #While loop to continue on user request
 while (newfoodchoice in yes):
