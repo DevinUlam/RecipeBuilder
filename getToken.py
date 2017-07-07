@@ -1,11 +1,6 @@
-import re
-import requests
-import urllib.request
-from bs4 import BeautifulSoup
-from bottle import route, run, request
+
 import spotipy
 import sys
-from spotipy import oauth2
 import spotipy.util as util
 
 def getToken ():
