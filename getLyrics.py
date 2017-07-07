@@ -9,80 +9,75 @@ import requests
 # import spotipy.util as util
 import getToken
 import lyriccomparison
-from collections import defaultdict
 
-# SPOTIPY_CLIENT_ID = '311940949ffb4afd98de6284b46fc15b'
-# SPOTIPY_CLIENT_SECRET = '2f654b5b80104d15826b041335485813'
-# SPOTIPY_REDIRECT_URI = 'http://localhost:8888/callback'
-# PORT_NUMBER = 8080
-# SCOPE = 'user-library-read'
-# CACHE = '.spotipyoauthcache'
-#
-# sp_oauth = oauth2.SpotifyOAuth(SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET,SPOTIPY_REDIRECT_URI,scope=SCOPE,cache_path=CACHE )
-#
-# @route('/')
-# def index():
-#
-#     access_token = ""
-#
-#     token_info = sp_oauth.get_cached_token()
-#
-#     if token_info:
-#         print ("Found cached token!")
-#         access_token = token_info['access_token']
-#         print(access_token)
-#     else:
-#         url = request.url
-#         code = sp_oauth.parse_response_code(url)
-#         if code:
-#             print ("Found Spotify auth code in Request URL! Trying to get valid access token...")
-#             token_info = sp_oauth.get_access_token(code)
-#             access_token = token_info['access_token']
-#
-#     if access_token:
-#         print ("Access token available! Trying to get user information...")
-#         sp = spotipy.Spotify(access_token)
-#         results = sp.current_user()
-#         return results
-#
-#     else:
-#         return htmlForLoginButton()
-#
-# def htmlForLoginButton():
-#     auth_url = getSPOauthURI()
-#     htmlLoginButton = "<a href='" + auth_url + "'>Login to Spotify</a>"
-#     return htmlLoginButton
-#
-# def getSPOauthURI():
-#     auth_url = sp_oauth.get_authorize_url()
-#     return auth_url
-
-#run(host='localhost', port=8888)
 
 topArtists = {
-    "Chris Stapleton": {
-        "key": "4YLtscXsxbVgi031ovDDdh",
-        "popularity": 1
+    # "Chris Stapleton": {
+    #     "key": "4YLtscXsxbVgi031ovDDdh"
+    # },
+    # "Blake Shelton": {
+    #     "key": "1UTPBmNbXNTittyMJrNkvw"
+    # },
+    # "Florida Georgia Line": {
+    #     "key": "3b8QkneNDz4JHKKKlLgYZg"
+    # },
+    # "Thomas Rhett": {
+    #     "key": "6x2LnllRG5uGarZMsD4iO8"
+    # },
+    # "Carrie Underwood": {
+    #     "key": "4xFUf1FHVy696Q1JQZMTRj"
+    # },
+    # "Luke Bryan": {
+    #     "key": "0BvkDsjIUla7X0k6CSWh1I"
+    # },
+
+    "Keith Urban": {
+        "key": "0u2FHSq3ln94y5Q57xazwf"
     },
-    "Blake Shelton": {
-        "key": "1UTPBmNbXNTittyMJrNkvw",
-        "popularity": 2
+    "Sam Hunt": {
+        "key": "2kucQ9jQwuD8jWdtR9Ef38"
     },
-    "Florida Georgia Line": {
-        "key": "3b8QkneNDz4JHKKKlLgYZg",
-        "popularity": 3
+    "Jason Aldean": {
+        "key": "3FfvYsEGaIb52QPXhg4DcH"
     },
-    "Thomas Rhett": {
-        "key": "6x2LnllRG5uGarZMsD4iO8",
-        "popularity": 4
+    "Cole Swindell": {
+        "key": "1mfDfLsMxYcOOZkzBxvSVW"
     },
-    "Carrie Underwood": {
-        "key": "4xFUf1FHVy696Q1JQZMTRj",
-        "popularity": 5
+    "Tim McGraw": {
+        "key": "6roFdX1y5BYSbp60OTJWMd"
     },
-    "Luke Bryan": {
-        "key": "0BvkDsjIUla7X0k6CSWh1I",
-        "popularity": 6
+    "Dierks Bentley": {
+        "key": "7x8nK0m0cP2ksQf0mjWdPS"
+    },
+    "Eric Church": {
+        "key": "2IvkS5MXK0vPGnwyJsrEyV"
+    },
+    "Kenny Chesney": {
+        "key": "3grHWM9bx2E9vwJCdlRv9O"
+    },
+    "Chris Young": {
+        "key": "4BYxqVkZyFjtik7crYLg5Q"
+    },
+    "Zac Brown Band": {
+        "key": "6yJCxee7QumYr820xdIsjo"
+    },
+    "Brett Eldredge": {
+        "key": "0qSX3s5pJnAlSsgsCne8Cz"
+    },
+    "Jon Pardi": {
+        "key": "4MoAOfV4ROWofLG3a3hhBN"
+    },
+    "Jake Owen": {
+        "key": "1n2pb9Tsfe4SwAjmUac6YT"
+    },
+    "Brad Paisley": {
+        "key": "13YmWQJFwgZrd4bf5IjMY4"
+    },
+    "Rascal Flatts": {
+        "key": "0a1gHP0HAqALbEyxaD5Ngn"
+    },
+    "Brantley Gilbert": {
+        "key": "5q8HGNo0BjLWaTAhRtbwxa"
     }
 }
 
@@ -106,29 +101,27 @@ for artist in topArtists:
     albumdata = albumrequest.json()
     albumdict.update({'Artist{0}'.format(i): {}})
     albumdict['Artist{0}'.format(i)].update({'Name': artist})
-
+    #albumdict['Artist{0}'.format(i)].update({'Popularity': artistinfo['popularity']})
     songdict.update({'Artist{0}'.format(i): {}})
     songdict['Artist{0}'.format(i)].update({'name': artist})
 
-    countdict['Artist'] = artist
-    countdict['numtruck'] = 0
-    countdict['numbeer'] = 0
+    countdict.update({'Artist{0}'.format(i): {}})
+    countdict['Artist{0}'.format(i)].update({'Name': artist})
+    countdict['Artist{0}'.format(i)].update({'numtruck': 0})
+    countdict['Artist{0}'.format(i)].update({'numbeer': 0})
+    countdict['Artist{0}'.format(i)].update({'Popularity': artistinfo['popularity']})
 
     j=0
     #print(albumdata)
     for items in albumdata['items']:
-        #print(albumdict)
-        #print(items)
-        #print(j)
+
         if j > 0:
             if items['name'] != albumdict['Artist{0}'.format(i)]['Album{0}'.format(j-1)]:
                 if items['album_type'] != "compilation":
 
                     albumdict['Artist{0}'.format(i)].update({'Album{0}'.format(j): items['name']})
                     albumdict['Artist{0}'.format(i)].update({'Album{0}ID'.format(j): items['uri'].replace("spotify:album:", "")})
-                    albumdict['Artist{0}'.format(i)].update({'Popularity': artistinfo['popularity']})
                     albumdict['Artist{0}'.format(i)].update({'Followers': artistinfo['followers']['total']})
-
 
                     albumID = albumdict['Artist{0}'.format(i)]['Album{0}ID'.format(j)]
                     songrequest = requests.get("https://api.spotify.com/v1/albums/{0}/tracks".format(albumID), headers={"Authorization": "Bearer {0}".format(token)})
@@ -138,19 +131,19 @@ for artist in topArtists:
                     for songs in songdata['items']:
 
                         count = lyriccomparison.getLyrics(artist, songs['name'])
+                        print(count)
+                        # print(count['truck'])
+                        if count != 'error':
+                            if count['truck'] != 0:
 
+                                newtruck = countdict['Artist{0}'.format(i)]['numtruck'] + 1
 
-                        if count['truck'] != 0:
-
-                            newtruck = countdict['numtruck'] + 1
-
-                            countdict.update({'numtruck': newtruck})
-                            print(countdict)
-                        elif count['beer'] != 0:
-                            newbeer = countdict['numbeer'] + 1
-                            countdict.update({'numbeer': newbeer})
-                            print(countdict)
-
+                                countdict['Artist{0}'.format(i)].update({'numtruck': newtruck})
+                                print(countdict)
+                            elif count['beer'] != 0:
+                                newbeer = countdict['Artist{0}'.format(i)]['numbeer'] + 1
+                                countdict['Artist{0}'.format(i)].update({'numbeer': newbeer})
+                                print(countdict)
 
                     #k=k+1
 

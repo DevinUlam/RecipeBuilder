@@ -38,5 +38,8 @@ def getLyrics(artist, song_title):
         num['beer'] = lyrics.count('beer')
         return num
     except Exception as e:
-        return "Exception occurred \n" + str(e)
+        num['truck'] = 0
+        num['beer'] = 0
+        return 'error'
+
 
